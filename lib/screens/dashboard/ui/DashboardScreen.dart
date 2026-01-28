@@ -35,8 +35,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.grey[50],
-     drawer: AppDrawer(
-    onLogout: () => logoutPopup(context), 
+      drawer: AppDrawer(
+      onLogout: () => logoutPopup(context), 
   ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -130,7 +130,37 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     );
   }
 
-  
+   Widget _buildHeader(dynamic user) {
+    return Stack(
+      alignment: Alignment.center,
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          height: 100,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: defaultColor,
+            borderRadius: const BorderRadius.vertical(bottom: Radius.circular(40)),
+          ),
+        ),
+        Positioned(
+          top: 30,
+          child: Container(
+            padding: const EdgeInsets.all(4),
+            decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+            child: CircleAvatar(
+              radius: 50,
+              backgroundColor: Colors.grey[200],
+              child: Text(
+                user?.adminName?[0].toUpperCase() ?? "U",
+                style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: defaultColor),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
  
 

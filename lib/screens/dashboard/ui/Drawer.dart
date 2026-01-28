@@ -72,7 +72,6 @@ class AppDrawer extends ConsumerWidget {
             ),
           ),
           
-          // ITEMS
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -85,14 +84,17 @@ class AppDrawer extends ConsumerWidget {
                   _buildItem(context, icon: Icons.assignment_rounded, text: 'Leave List', onTap: () {}),
                   _buildItem(context, icon: Icons.account_balance_wallet_rounded, text: 'Payroll', onTap: () {}),
                   const Divider(height: 30, thickness: 1, indent: 10, endIndent: 10),
-                  _buildItem(context, icon: Icons.person_outline_rounded, text: 'My Profile', onTap: () {}),
+                  _buildItem(context, icon: Icons.person_outline_rounded, text: 'My Profile', onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/profile');
+                  }),
                   _buildItem(
                     context,
                     icon: Icons.logout_rounded, 
                     text: 'Logout', 
                     color: Colors.redAccent,
                     onTap: () {
-                      Navigator.pop(context); // Close drawer
+                      Navigator.pop(context); 
                       onLogout(); // Call the logout popup
                     }
                   ),

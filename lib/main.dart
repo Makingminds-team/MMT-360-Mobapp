@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:makingmindstechnologies_360/screens/dashboard/ui/DashboardScreen.dart';
 import 'package:makingmindstechnologies_360/screens/login/ui/LoginScreen.dart';
+import 'package:makingmindstechnologies_360/screens/profile/ui/ProfileScreen.dart';
 import 'package:makingmindstechnologies_360/utils/Landing.dart';
 
 
@@ -31,6 +32,8 @@ class MyApp extends StatelessWidget {
             "/": (context) => Landing(),
             "/login": (context) => const LoginScreen(),
             "/home": (context) => DashboardScreen(),
+            "/profile": (context) => ProfileScreen(),
+
           },
           onGenerateRoute: (value) {
             return MaterialPageRoute(builder: (context) => const LoginScreen());
