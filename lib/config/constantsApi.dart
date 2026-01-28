@@ -8,6 +8,11 @@ class ConstantApi {
   static String loginUrl = SERVER_ONE + "auth/admin_signin/";
   static String adminInfo = SERVER_ONE + "auth/admin_info/";
 
+  // dashboard
+  static String summaryUrl = SERVER_ONE + "dashboard/summary/";
+
+  
+
   static String SOMETHING_WRONG = "Some thing wrong";
   static String NO_INTERNET = "No internet Connection";
   static String BAD_RESPONSE = "Bad Response";

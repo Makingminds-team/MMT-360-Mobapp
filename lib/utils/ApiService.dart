@@ -1,6 +1,8 @@
 
 
 import 'package:makingmindstechnologies_360/config/constantsApi.dart';
+import 'package:makingmindstechnologies_360/screens/dashboard/model/DashboardEmployeeSummaryModel.dart';
+import 'package:makingmindstechnologies_360/screens/login/model/AdminInfoModel.dart';
 import 'package:makingmindstechnologies_360/screens/login/model/LoginModel.dart';
 import 'package:makingmindstechnologies_360/utils/Generic.dart';
 import 'package:makingmindstechnologies_360/utils/RequestMethods.dart';
@@ -29,6 +31,52 @@ class ApiService {
       }
     }
     return LoginModel();
+  }
+
+
+  // ADMIN INFO
+  Future<AdminInfoModel> adminInfoDetailsApi() async {
+    final result =
+        await requestPOST(url: ConstantApi.adminInfo, formData: {});
+
+    if (result["success"] == true) {
+      print("resultOTP:$result");
+      print("resultOTPsss:${result["success"]}");
+      return AdminInfoModel?.fromJson(result["response"]);
+    } else {
+      try {
+        var resultval = AdminInfoModel.fromJson(result["response"]);
+        // Toast.show(resultval.message.toString(), context);
+        print(result["response"]);
+        return resultval;
+      } catch (e) {
+        print(result["response"]);
+        // Toast.show(result["response"], context);
+      }
+    }
+    return AdminInfoModel();
+  }
+
+  // dashboard summary
+
+  Future<DashboardEmployeeSummaryModel> dasboardSummaryApi() async {
+    final result = await requestGET(url: ConstantApi.summaryUrl);
+    if (result["success"] == true) {
+      print("resultOTP:$result");
+      print("resultOTPsss:${result["success"]}");
+      return DashboardEmployeeSummaryModel?.fromJson(result["response"]);
+    } else {
+      try {
+        var resultval = DashboardEmployeeSummaryModel.fromJson(result["response"]);
+        // Toast.show(resultval.message.toString(), context);
+        print(result["response"]);
+        return resultval;
+      } catch (e) {
+        print(result["response"]);
+        // Toast.show(result["response"], context);
+      }
+    }
+    return DashboardEmployeeSummaryModel();
   }
 
   Future<bool> refreshToken() async {
