@@ -168,7 +168,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   void _saveCredentials() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isLoggedIn', true);
-    await prefs.setString('phoneNumber', _userName.text);
+    await prefs.setString('userName', _userName.text);
     await prefs.setBool('rememberMe', true);
   }
 }

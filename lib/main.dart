@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
           routes: {
             "/": (context) => Landing(),
             "/login": (context) => const LoginScreen(),
-            "/home": (context) => Dashboardscreen(),
+            "/home": (context) => DashboardScreen(),
           },
           onGenerateRoute: (value) {
             return MaterialPageRoute(builder: (context) => const LoginScreen());
