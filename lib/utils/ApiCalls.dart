@@ -4,6 +4,7 @@ import 'package:makingmindstechnologies_360/config/Api.dart';
 import 'package:makingmindstechnologies_360/screens/dashboard/model/DashboardEmployeeSummaryModel.dart';
 import 'package:makingmindstechnologies_360/screens/login/model/AdminInfoModel.dart';
 import 'package:makingmindstechnologies_360/screens/login/model/LoginModel.dart';
+import 'package:makingmindstechnologies_360/screens/projects/model/ProjectModel.dart';
 import 'package:makingmindstechnologies_360/utils/Generic.dart';
 
 
@@ -24,6 +25,10 @@ final dasboardEmployeeSummary = FutureProvider<DashboardEmployeeSummaryModel?>((
   return ref.watch(apiServiceProvider).dasboardSummaryApi();
 });
 
+// project list
+final projectListProvider = FutureProvider<List<ProjectModel>>((ref) async {
+  return await ref.watch(apiServiceProvider).projectListApi();
+});
 
 
 final refereshTokenProvider = FutureProvider<bool?>((ref) async {

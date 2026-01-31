@@ -10,6 +10,8 @@ class ConstantApi {
 
   // dashboard
   static String summaryUrl = SERVER_ONE + "dashboard/summary/";
+  static String projectList = SERVER_ONE + "masters/projectslist/";
+
 
   
 
