@@ -1,9 +1,11 @@
 
 
+import 'package:flutter/material.dart';
 import 'package:makingmindstechnologies_360/config/constantsApi.dart';
 import 'package:makingmindstechnologies_360/screens/dashboard/model/DashboardEmployeeSummaryModel.dart';
 import 'package:makingmindstechnologies_360/screens/login/model/AdminInfoModel.dart';
 import 'package:makingmindstechnologies_360/screens/login/model/LoginModel.dart';
+import 'package:makingmindstechnologies_360/screens/projects/model/ProjectModel.dart';
 import 'package:makingmindstechnologies_360/utils/Generic.dart';
 import 'package:makingmindstechnologies_360/utils/RequestMethods.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -78,6 +80,22 @@ class ApiService {
     }
     return DashboardEmployeeSummaryModel();
   }
+
+  // project list
+Future<List<ProjectModel>> projectListApi() async {
+  try {
+    final result = await requestGET(url: ConstantApi.projectList);
+    
+    // Cast to List and then map
+    final List<dynamic> list = result as List<dynamic>;
+    return list.map((item) => ProjectModel.fromJson(item as Map<String, dynamic>)).toList();
+    
+  } catch (e, stackTrace) {
+    debugPrint("Project List API Error: $e");
+    debugPrint("Stack trace: $stackTrace");
+    return [];
+  }
+}
 
   Future<bool> refreshToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

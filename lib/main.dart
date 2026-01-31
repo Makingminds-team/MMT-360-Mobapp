@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:makingmindstechnologies_360/screens/dashboard/ui/DashboardScreen.dart';
 import 'package:makingmindstechnologies_360/screens/login/ui/LoginScreen.dart';
 import 'package:makingmindstechnologies_360/screens/profile/ui/ProfileScreen.dart';
+import 'package:makingmindstechnologies_360/screens/projects/ui/ProjectListScreen.dart';
 import 'package:makingmindstechnologies_360/utils/Landing.dart';
 
 
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
             "/login": (context) => const LoginScreen(),
             "/home": (context) => DashboardScreen(),
             "/profile": (context) => ProfileScreen(),
+            "/projects": (context) => const ProjectListScreen(),
 
           },
           onGenerateRoute: (value) {
