@@ -78,27 +78,34 @@ Widget buildSummaryCard({
   required String title,
   required String value,
   required IconData icon,
+  Color? color,
 }) {
+  Color cardColor = color ?? defaultColor;
   return Container(
-    padding: const EdgeInsets.all(10),
+    padding: const EdgeInsets.all(12),
     decoration: BoxDecoration(
       color: Colors.white,
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.circular(16),
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withOpacity(0.03),
-          blurRadius: 10,
+          color: cardColor.withOpacity(0.08),
+          blurRadius: 12,
           offset: const Offset(0, 4),
         ),
       ],
+      border: Border.all(color: cardColor.withOpacity(0.15), width: 1.5),
     ),
     child: Row(
       children: [
-        CircleAvatar(
-          backgroundColor: defaultColor.withOpacity(0.1),
-          child: Icon(icon, color: defaultColor, size: 22),
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: cardColor.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(icon, color: cardColor, size: 24),
         ),
-        const SizedBox(width: 15),
+        const SizedBox(width: 12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,19 +113,21 @@ Widget buildSummaryCard({
             children: [
               Text(
                 title.toUpperCase(),
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0.5,
+                style: TextStyle(
+                  fontSize: 11,
+                  color: Colors.grey[600],
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.3,
                 ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 4),
               Text(
                 value,
                 style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
                   color: Colors.black87,
                 ),
               ),

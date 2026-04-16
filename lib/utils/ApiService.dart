@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:makingmindstechnologies_360/config/constantsApi.dart';
+import 'package:makingmindstechnologies_360/screens/clients/model/ClientListModel.dart';
 import 'package:makingmindstechnologies_360/screens/dashboard/model/DashboardEmployeeSummaryModel.dart';
 import 'package:makingmindstechnologies_360/screens/login/model/AdminInfoModel.dart';
 import 'package:makingmindstechnologies_360/screens/login/model/LoginModel.dart';
@@ -82,20 +83,48 @@ class ApiService {
   }
 
   // project list
-Future<List<ProjectModel>> projectListApi() async {
-  try {
-    final result = await requestGET(url: ConstantApi.projectList);
-    
-    // Cast to List and then map
-    final List<dynamic> list = result as List<dynamic>;
-    return list.map((item) => ProjectModel.fromJson(item as Map<String, dynamic>)).toList();
-    
-  } catch (e, stackTrace) {
-    debugPrint("Project List API Error: $e");
-    debugPrint("Stack trace: $stackTrace");
-    return [];
+  Future<List<ProjectModel>> projectListApi() async {
+    try {
+      final result = await requestGET(url: ConstantApi.projectList);
+
+      if (result["success"] == true) {
+        final List<dynamic> list = result["response"] as List<dynamic>;
+        return list
+            .map((item) => ProjectModel.fromJson(item as Map<String, dynamic>))
+            .toList();
+      } else {
+        debugPrint("Project List API failed: ${result["response"]}");
+        return [];
+      }
+    } catch (e, stackTrace) {
+      debugPrint("Project List API Error: $e");
+      debugPrint("Stack trace: $stackTrace");
+      return [];
+    }
   }
-}
+
+  // client list
+
+  Future<ClientListModel> clientListApi() async {
+    final result = await requestGET(url: ConstantApi.clientList);
+    if (result["success"] == true) {
+      print("resultOTP:$result");
+      print("resultOTPsss:${result["success"]}");
+      return ClientListModel?.fromJson(result["response"]);
+    } else {
+      try {
+        var resultval = ClientListModel.fromJson(result["response"]);
+        // Toast.show(resultval.message.toString(), context);
+        print(result["response"]);
+        return resultval;
+      } catch (e) {
+        print(result["response"]);
+        // Toast.show(result["response"], context);
+      }
+    }
+    return ClientListModel();
+  }
+  
 
   Future<bool> refreshToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

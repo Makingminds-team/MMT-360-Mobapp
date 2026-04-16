@@ -21,10 +21,10 @@ Future<dynamic> requestGET({required String url}) async {
 
     switch (response.statusCode) {
       case 200:
-        final Map<String, dynamic> responseDecode = jsonDecode(decodedBody);
+        final dynamic responseDecode = jsonDecode(decodedBody);
         return {'success': true, 'response': responseDecode};
       case 201:
-        final Map<String, dynamic> responseDecode = jsonDecode(decodedBody);
+        final dynamic responseDecode = jsonDecode(decodedBody);
         return {'success': true, 'response': responseDecode};
     
       default:
@@ -124,12 +124,12 @@ Future<dynamic> requestPOST2(
     print(response);
     switch (response.statusCode) {
       case 200:
-        final Map<String, dynamic> responseDecode = jsonDecode(response.body);
+        final dynamic responseDecode = jsonDecode(response.body);
 
         final jsonResponse = {'success': true, 'response': responseDecode};
         return jsonResponse;
       case 201:
-        final Map<String, dynamic> responseDecode = jsonDecode(response.body);
+        final dynamic responseDecode = jsonDecode(response.body);
 
         final jsonResponse = {'success': true, 'response': responseDecode};
         return jsonResponse;
@@ -174,12 +174,12 @@ Future<dynamic> requestPOST3(
     print(response);
     switch (response.statusCode) {
       case 200:
-        final Map<String, dynamic> responseDecode = jsonDecode(response.body);
+        final dynamic responseDecode = jsonDecode(response.body);
 
         final jsonResponse = {'success': true, 'response': responseDecode};
         return jsonResponse;
       case 201:
-        final Map<String, dynamic> responseDecode = jsonDecode(response.body);
+        final dynamic responseDecode = jsonDecode(response.body);
 
         final jsonResponse = {'success': true, 'response': responseDecode};
         return jsonResponse;
@@ -228,12 +228,12 @@ Future<dynamic> requestPOST4(
     print(response);
     switch (response.statusCode) {
       case 200:
-        final Map<String, dynamic> responseDecode = jsonDecode(response.body);
+        final dynamic responseDecode = jsonDecode(response.body);
 
         final jsonResponse = {'success': true, 'response': responseDecode};
         return jsonResponse;
       case 201:
-        final Map<String, dynamic> responseDecode = jsonDecode(response.body);
+        final dynamic responseDecode = jsonDecode(response.body);
 
         final jsonResponse = {'success': true, 'response': responseDecode};
         return jsonResponse;
@@ -280,12 +280,12 @@ Future<dynamic> requestPOST5({required String url}) async {
       case 200:
         final decodedBody = utf8.decode(response.bodyBytes);
 
-        final Map<String, dynamic> responseDecode = jsonDecode(decodedBody);
+        final dynamic responseDecode = jsonDecode(decodedBody);
 
         final jsonResponse = {'success': true, 'response': responseDecode};
         return jsonResponse;
       case 201:
-        final Map<String, dynamic> responseDecode = jsonDecode(response.body);
+        final dynamic responseDecode = jsonDecode(response.body);
 
         final jsonResponse = {'success': true, 'response': responseDecode};
         return jsonResponse;
@@ -335,12 +335,12 @@ Future<dynamic> requestMultiPart({
     print(response);
     switch (response.statusCode) {
       case 200:
-        final Map<String, dynamic> responseDecode = jsonDecode(response.body);
+        final dynamic responseDecode = jsonDecode(response.body);
 
         final jsonResponse = {'success': true, 'response': responseDecode};
         return jsonResponse;
       case 201:
-        final Map<String, dynamic> responseDecode = jsonDecode(response.body);
+        final dynamic responseDecode = jsonDecode(response.body);
 
         final jsonResponse = {'success': true, 'response': responseDecode};
         return jsonResponse;

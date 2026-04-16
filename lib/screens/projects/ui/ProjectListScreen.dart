@@ -26,36 +26,75 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> with Sing
     final projectsAsync = ref.watch(projectListProvider);
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(
+        title: const Text("Projects", 
+          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w800, fontSize: 24, letterSpacing: -0.5)),
         backgroundColor: Colors.white,
-        elevation: 0.5,
-        title: const Text("Project List", 
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18)),
-        centerTitle: true,
+        centerTitle: false,
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black, size: 20),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.black87, size: 22),
           onPressed: () => Navigator.pop(context),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add_box_rounded, color: defaultColor, size: 28),
-            onPressed: () {}, // New Project logic
+        // actions: [
+        //   Padding(
+        //     padding: const EdgeInsets.only(right: 12.0),
+        //     child: IconButton(
+        //       icon: Container(
+        //         padding: const EdgeInsets.all(8),
+        //         decoration: BoxDecoration(
+        //           color: defaultColor.withOpacity(0.1),
+        //           borderRadius: BorderRadius.circular(12),
+        //         ),
+        //         child: const Icon(Icons.add_rounded, color: defaultColor, size: 24),
+        //       ),
+        //       onPressed: () {}, // New Project logic
+        //     ),
+        //   ),
+        // ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(60),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border(bottom: BorderSide(color: Colors.grey[200]!, width: 1)),
+            ),
+            child: Container(
+              height: 44,
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(22),
+              ),
+              child: TabBar(
+                controller: _tabController,
+                isScrollable: true,
+                padding: const EdgeInsets.all(4),
+                indicator: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 4, offset: const Offset(0, 2)),
+                  ],
+                ),
+                labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+                labelColor: defaultColor,
+                unselectedLabelColor: Colors.grey[600],
+                dividerColor: Colors.transparent,
+                tabAlignment: TabAlignment.start,
+                tabs: const [
+                  Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Tab(text: "PENDING")),
+                  Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Tab(text: "APPROVED")),
+                  Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Tab(text: "ASSIGNED")),
+                  Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Tab(text: "ON GOING")),
+                  Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Tab(text: "ON HOLD")),
+                ],
+              ),
+            ),
           ),
-        ],
-        bottom: TabBar(
-          controller: _tabController,
-          isScrollable: true,
-          labelColor: defaultColor,
-          unselectedLabelColor: Colors.grey,
-          indicatorColor: defaultColor,
-          tabs: const [
-            Tab(text: "PENDING"),
-            Tab(text: "APPROVED"),
-            Tab(text: "ASSIGNED"),
-            Tab(text: "ON GOING"),
-            Tab(text: "ON HOLD"),
-          ],
         ),
       ),
       body: projectsAsync.when(
@@ -63,136 +102,260 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> with Sing
           if (projects == null || projects.isEmpty) return _buildEmptyState();
           
           return TabBarView(
-  controller: _tabController,
-  children: [
-    _buildProjectListView(projects, 1), // Pending (Approval Pending)
-    _buildProjectListView(projects, 2), // Approved (you don't have this status in data)
-    _buildProjectListView(projects, 3), // Assigned (you don't have this status in data)
-    _buildProjectListView(projects, 4), // On Going
-    _buildProjectListView(projects, 5), // On Hold
-  ],
-);
+            controller: _tabController,
+            children: [
+              _buildProjectListView(projects, 1),
+              _buildProjectListView(projects, 2),
+              _buildProjectListView(projects, 3),
+              _buildProjectListView(projects, 4),
+              _buildProjectListView(projects, 5),
+            ],
+          );
         },
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => Center(child: CircularProgressIndicator(color: defaultColor)),
         error: (err, stack) => Center(child: Text("Error: $err")),
       ),
     );
   }
 
   Widget _buildProjectListView(List<ProjectModel> allProjects, int statusCode) {
-    // Filtering projects based on status (assuming projectStatus matches the tab)
     final filteredList = allProjects.where((p) => p.projectStatus == statusCode).toList();
 
     if (filteredList.isEmpty) return _buildEmptyState();
 
-    return ListView.builder(
-      padding: const EdgeInsets.all(15),
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       itemCount: filteredList.length,
+      separatorBuilder: (context, index) => const SizedBox(height: 16),
       itemBuilder: (context, index) {
-        final project = filteredList[index];
-        return _buildProjectCard(project);
+        return _buildProjectCard(filteredList[index]);
       },
     );
   }
 
   Widget _buildProjectCard(ProjectModel project) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 15),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 10, offset: const Offset(0, 4)),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Top section: Category & Status
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(color: defaultColor.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
-                  child: Text(project.typeLabel ?? "General", 
-                    style: const TextStyle(color: defaultColor, fontSize: 11, fontWeight: FontWeight.bold)),
-                ),
-                _statusChip(project.projectStatusLabel ?? "Unknown"),
-              ],
-            ),
+    return Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(20),
+      elevation: 0,
+      child: InkWell(
+        onTap: () {
+          // Navigate to details
+        },
+        borderRadius: BorderRadius.circular(20),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Colors.grey[200]!, width: 1.5),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.02), 
+                blurRadius: 15, 
+                offset: const Offset(0, 5)
+              ),
+            ],
           ),
-          
-          // Project Name & Short Code
-          ListTile(
-            title: Text(project.projectName ?? "Unnamed Project", 
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-            subtitle: Text("ID: ${project.shortCode ?? 'N/A'}", style: const TextStyle(fontSize: 12)),
-          ),
-
-          const Divider(height: 1),
-
-          // Bottom section: Members & Date
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Overlapping Avatars for Employees
-                SizedBox(
-                  width: 100,
-                  height: 30,
-                  child: Stack(
-                    children: List.generate(
-                      (project.employee?.length ?? 0) > 3 ? 3 : (project.employee?.length ?? 0),
-                      (index) => Positioned(
-                        left: index * 20.0,
-                        child: CircleAvatar(
-                          radius: 14,
-                          backgroundColor: Colors.white,
-                          child: CircleAvatar(
-                            radius: 12,
-                            backgroundColor: Colors.indigo[100 * (index + 1)],
-                            child: Text(project.employee![index].firstname?[0] ?? "?", 
-                              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
-                          ),
-                        ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Top section: Header with Icon and Title
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: defaultColor.withOpacity(0.08),
+                        borderRadius: BorderRadius.circular(14),
                       ),
+                      child: const Icon(Icons.dashboard_customize_rounded, color: defaultColor, size: 24),
+                    ),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  project.projectName ?? "Unnamed Project",
+                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.black87),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              _statusChip(project.projectStatusLabel ?? "Unknown", project.projectStatus ?? 0),
+                            ],
+                          ),
+                          const SizedBox(height: 6),
+                          Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[100],
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  "ID: ${project.shortCode ?? 'N/A'}",
+                                  style: TextStyle(color: Colors.grey[700], fontSize: 12, fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  "• ${project.typeLabel ?? 'General'}",
+                                  style: TextStyle(color: Colors.grey[500], fontSize: 13, fontWeight: FontWeight.w500),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const Divider(height: 1, indent: 16, endIndent: 16, color: Color(0xFFF0F0F0)),
+
+              // Bottom section: Date and Members
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.calendar_month_rounded, size: 16, color: Colors.grey),
+                        const SizedBox(width: 6),
+                        Text(
+                          project.projectDate ?? "No date specified",
+                          style: TextStyle(color: Colors.grey[600], fontSize: 13, fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+                    _buildAvatarStack(project.employee),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAvatarStack(List<Employee>? employees) {
+    if (employees == null || employees.isEmpty) {
+      return Text(
+        "No members", 
+        style: TextStyle(color: Colors.grey[400], fontSize: 12, fontStyle: FontStyle.italic)
+      );
+    }
+    
+    final int maxDisplay = 3;
+    final int extraCount = employees.length > maxDisplay ? employees.length - maxDisplay : 0;
+    final displayCount = employees.length > maxDisplay ? maxDisplay : employees.length;
+
+    return SizedBox(
+      height: 32,
+      width: (displayCount * 22.0) + (extraCount > 0 ? 22.0 : 0) + 10.0,
+      child: Stack(
+        alignment: Alignment.centerRight,
+        children: [
+          for (int i = 0; i < displayCount; i++)
+            Positioned(
+              right: (displayCount - 1 - i) * 22.0 + (extraCount > 0 ? 22.0 : 0),
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 2),
+                ),
+                child: CircleAvatar(
+                  radius: 14,
+                  backgroundColor: Colors.primaries[i % Colors.primaries.length].withOpacity(0.2),
+                  child: Text(
+                    employees[i].firstname?[0].toUpperCase() ?? "?",
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.primaries[i % Colors.primaries.length].shade800,
                     ),
                   ),
                 ),
-                Row(
-                  children: [
-                    const Icon(Icons.calendar_today_outlined, size: 14, color: Colors.grey),
-                    const SizedBox(width: 5),
-                    Text(project.projectDate ?? "No date", style: const TextStyle(color: Colors.grey, fontSize: 12)),
-                  ],
-                ),
-              ],
+              ),
             ),
-          ),
+          if (extraCount > 0)
+            Positioned(
+              right: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 2),
+                ),
+                child: CircleAvatar(
+                  radius: 14,
+                  backgroundColor: Colors.grey[200],
+                  child: Text(
+                    "+$extraCount",
+                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.grey[700]),
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );
   }
 
-  Widget _statusChip(String label) {
+  Widget _statusChip(String label, int statusCode) {
+    Color chipColor;
+    Color textColor;
+
+    switch (statusCode) {
+      case 1: // Pending
+        chipColor = Colors.orange.shade50;
+        textColor = Colors.orange.shade700;
+        break;
+      case 2: // Approved
+        chipColor = Colors.blue.shade50;
+        textColor = Colors.blue.shade700;
+        break;
+      case 3: // Assigned
+        chipColor = Colors.indigo.shade50;
+        textColor = Colors.indigo.shade700;
+        break;
+      case 4: // On Going
+        chipColor = Colors.green.shade50;
+        textColor = Colors.green.shade700;
+        break;
+      case 5: // On Hold
+        chipColor = Colors.red.shade50;
+        textColor = Colors.red.shade700;
+        break;
+      default:
+        chipColor = Colors.grey.shade100;
+        textColor = Colors.grey.shade700;
+    }
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.orange.withOpacity(0.5)),
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.orange[50],
+        color: chipColor,
+        borderRadius: BorderRadius.circular(8),
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(Icons.info_outline, size: 12, color: Colors.orange),
-          const SizedBox(width: 4),
-          Text(label, style: const TextStyle(color: Colors.orange, fontSize: 10, fontWeight: FontWeight.w600)),
-        ],
+      child: Text(
+        label, 
+        style: TextStyle(color: textColor, fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 0.3)
       ),
     );
   }
@@ -202,9 +365,27 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> with Sing
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.folder_off_outlined, size: 64, color: Colors.grey[300]),
-          const SizedBox(height: 10),
-          const Text("- No Projects -", style: TextStyle(color: Colors.grey, fontSize: 16)),
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 20, offset: const Offset(0, 10)),
+              ],
+            ),
+            child: Icon(Icons.folder_open_rounded, size: 64, color: Colors.grey[300]),
+          ),
+          const SizedBox(height: 24),
+          const Text(
+            "No Projects Found", 
+            style: TextStyle(color: Colors.black87, fontSize: 18, fontWeight: FontWeight.bold)
+          ),
+          const SizedBox(height: 8),
+          Text(
+            "There are no projects matching this status.", 
+            style: TextStyle(color: Colors.grey[500], fontSize: 14)
+          ),
         ],
       ),
     );

@@ -84,8 +84,10 @@ class AppDrawer extends ConsumerWidget {
                     Navigator.pop(context);
                     Navigator.pushNamed(context, '/projects');
                   }),
-                  _buildItem(context, icon: Icons.assignment_rounded, text: 'Leave List', onTap: () {}),
-                  _buildItem(context, icon: Icons.account_balance_wallet_rounded, text: 'Payroll', onTap: () {}),
+                  _buildItem(context, icon: Icons.assignment_rounded, text: 'Clients', onTap: () {
+                     Navigator.pop(context);
+                    Navigator.pushNamed(context, '/clients');
+                  }),
                   const Divider(height: 30, thickness: 1, indent: 10, endIndent: 10),
                   _buildItem(context, icon: Icons.person_outline_rounded, text: 'My Profile', onTap: () {
                     Navigator.pop(context);
