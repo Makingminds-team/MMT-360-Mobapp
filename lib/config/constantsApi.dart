@@ -12,6 +12,10 @@ class ConstantApi {
   static String summaryUrl = SERVER_ONE + "dashboard/summary/";
   static String projectList = SERVER_ONE + "masters/projectslist/";
 
+  // client
+  static String clientList = SERVER_ONE + "masters/clients/";
+
+
 
   
 

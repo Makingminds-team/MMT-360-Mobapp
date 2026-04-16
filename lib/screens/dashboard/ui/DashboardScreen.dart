@@ -90,13 +90,13 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   if (data == null) return const Center(child: Text("No data found"));
                   
                   final List<Map<String, dynamic>> items = [
-                    {"title": "Total Employees", "value": "${data.employeeCount ?? 0}", "icon": Icons.people_outline},
-                    {"title": "Total Clients", "value": "${data.clientCount ?? 0}", "icon": Icons.person_add_alt_1_outlined},
-                    {"title": "Total Projects", "value": "${data.projectsCount ?? 0}", "icon": Icons.folder_open_outlined},
-                    {"title": "Ongoing Projects", "value": "${data.ongoingProjects ?? 0}", "icon": Icons.access_time},
-                    {"title": "On-Hold Projects", "value": "${data.onholdProjects ?? 0}", "icon": Icons.pause_circle_outline},
-                    {"title": "Testing Projects", "value": "${data.ontestingProjects ?? 0}", "icon": Icons.build_circle_outlined},
-                    {"title": "Completed Projects", "value": "${data.completedProjects ?? 0}", "icon": Icons.check_circle_outline},
+                    {"title": "Total Employees", "value": "${data.employeeCount ?? 0}", "icon": Icons.people_outline, "color": Colors.blue[600]},
+                    {"title": "Total Clients", "value": "${data.clientCount ?? 0}", "icon": Icons.person_add_alt_1_outlined, "color": Colors.green[600]},
+                    {"title": "Total Projects", "value": "${data.projectsCount ?? 0}", "icon": Icons.folder_open_outlined, "color": Colors.purple[600]},
+                    {"title": "Ongoing Projects", "value": "${data.ongoingProjects ?? 0}", "icon": Icons.access_time, "color": Colors.orange[600]},
+                    {"title": "On-Hold Projects", "value": "${data.onholdProjects ?? 0}", "icon": Icons.pause_circle_outline, "color": Colors.red[500]},
+                    {"title": "Testing Projects", "value": "${data.ontestingProjects ?? 0}", "icon": Icons.build_circle_outlined, "color": Colors.teal[600]},
+                    {"title": "Completed Projects", "value": "${data.completedProjects ?? 0}", "icon": Icons.check_circle_outline, "color": Colors.indigo[600]},
                   ];
 
                   return GridView.builder(
@@ -105,8 +105,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2, 
                       crossAxisSpacing: 15,
-                      mainAxisSpacing: 20,
-                      childAspectRatio: 2, 
+                      mainAxisSpacing: 15,
+                      childAspectRatio: 1.8, 
                     ),
                     itemCount: items.length,
                     itemBuilder: (context, index) {
@@ -114,6 +114,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                         title: items[index]['title'],
                         value: items[index]['value'],
                         icon: items[index]['icon'],
+                        color: items[index]['color'],
                       );
                     },
                   );
