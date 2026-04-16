@@ -129,12 +129,12 @@ class ApiService {
   Future<bool> refreshToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var formData = <String, dynamic>{
-      "username": prefs.getString('userName'),
-      "password": prefs.getString('password'),
+      "username": prefs.getString('userName') ?? "",
+      "password": prefs.getString('password') ?? "",
     };
 
-    final result = await requestPOST2(
-        url: ConstantApi.adminInfo, formData: formData);
+    final result = await requestPOST3(
+        url: ConstantApi.loginUrl, formData: formData);
 
     if (result["success"] == true) {
       print("resultOTP:$result");
