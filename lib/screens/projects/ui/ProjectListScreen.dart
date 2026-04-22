@@ -17,8 +17,8 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> with Sing
   @override
   void initState() {
     super.initState();
-    // Tabs matching your web columns: Approval, Approved, Assigned, Ongoing, Hold
-    _tabController = TabController(length: 5, vsync: this);
+    // Tabs matching your web columns: Approval, Approved, Assigned, Ongoing, Hold, Deployed
+    _tabController = TabController(length: 6, vsync: this);
   }
 
   @override
@@ -91,6 +91,7 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> with Sing
                   Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Tab(text: "ASSIGNED")),
                   Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Tab(text: "ON GOING")),
                   Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Tab(text: "ON HOLD")),
+                  Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Tab(text: "DEPLOYED")),
                 ],
               ),
             ),
@@ -109,6 +110,7 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> with Sing
               _buildProjectListView(projects, 3),
               _buildProjectListView(projects, 4),
               _buildProjectListView(projects, 5),
+              _buildProjectListView(projects, 6),
             ],
           );
         },
@@ -119,7 +121,13 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> with Sing
   }
 
   Widget _buildProjectListView(List<ProjectModel> allProjects, int statusCode) {
-    final filteredList = allProjects.where((p) => p.projectStatus == statusCode).toList();
+    final filteredList = allProjects.where((p) {
+      // For Deployed tab, also check the label in case the status code varies
+      if (statusCode == 6) {
+        return p.projectStatus == 6 || (p.projectStatusLabel?.toLowerCase().contains('deployed') ?? false);
+      }
+      return p.projectStatus == statusCode;
+    }).toList();
 
     if (filteredList.isEmpty) return _buildEmptyState();
 
@@ -321,30 +329,35 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> with Sing
     Color chipColor;
     Color textColor;
 
-    switch (statusCode) {
-      case 1: // Pending
-        chipColor = Colors.orange.shade50;
-        textColor = Colors.orange.shade700;
-        break;
-      case 2: // Approved
-        chipColor = Colors.blue.shade50;
-        textColor = Colors.blue.shade700;
-        break;
-      case 3: // Assigned
-        chipColor = Colors.indigo.shade50;
-        textColor = Colors.indigo.shade700;
-        break;
-      case 4: // On Going
-        chipColor = Colors.green.shade50;
-        textColor = Colors.green.shade700;
-        break;
-      case 5: // On Hold
-        chipColor = Colors.red.shade50;
-        textColor = Colors.red.shade700;
-        break;
-      default:
-        chipColor = Colors.grey.shade100;
-        textColor = Colors.grey.shade700;
+    if (statusCode == 6 || label.toLowerCase().contains('deployed')) {
+      chipColor = Colors.teal.shade50;
+      textColor = Colors.teal.shade700;
+    } else {
+      switch (statusCode) {
+        case 1: // Pending
+          chipColor = Colors.orange.shade50;
+          textColor = Colors.orange.shade700;
+          break;
+        case 2: // Approved
+          chipColor = Colors.blue.shade50;
+          textColor = Colors.blue.shade700;
+          break;
+        case 3: // Assigned
+          chipColor = Colors.indigo.shade50;
+          textColor = Colors.indigo.shade700;
+          break;
+        case 4: // On Going
+          chipColor = Colors.green.shade50;
+          textColor = Colors.green.shade700;
+          break;
+        case 5: // On Hold
+          chipColor = Colors.red.shade50;
+          textColor = Colors.red.shade700;
+          break;
+        default:
+          chipColor = Colors.grey.shade100;
+          textColor = Colors.grey.shade700;
+      }
     }
 
     return Container(

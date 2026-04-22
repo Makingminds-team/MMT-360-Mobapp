@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:makingmindstechnologies_360/common/Colors.dart';
+import 'package:makingmindstechnologies_360/common/Styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -9,69 +10,115 @@ void logoutPopup(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(
-            "Logout",
-            style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'JosefinSans',
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          content: const Text(
-            "Are you sure you want to logout?",
-            style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'JosefinSans',
-              fontSize: 14,
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                Navigator.pop(context);
-              },
-              child: const Text(
-                "Cancel",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'JosefinSans',
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
+        return Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 30),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(28),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
                 ),
-              ),
+              ],
             ),
-TextButton(
-  onPressed: () async {
-    Navigator.pop(context); 
-    
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isLoggedIn', false);
-    await prefs.remove('userName'); 
-    await prefs.remove('password');
-    await prefs.setBool('rememberMe', false);
-
-    Navigator.of(context).pushNamedAndRemoveUntil(
-      '/login', 
-      (route) => false,
-    );
-  },
-  child: const Text(
-    "Logout",
-    style: TextStyle(
-      color: Colors.red,
-      fontFamily: 'JosefinSans',
-      fontSize: 15,
-      fontWeight: FontWeight.w600,
-    ),
-  ),
-),
-          ],
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: mmColor.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.logout_rounded, color: mmColor, size: 32),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  "Sign Out",
+                  style: TextStyle(
+                    fontFamily: fontName,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black.withOpacity(0.85),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  "Are you sure you want to log out of your account?",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: fontName,
+                    fontSize: 14,
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 30),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        style: TextButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        ),
+                        child: Text(
+                          "Cancel",
+                          style: TextStyle(
+                            fontFamily: fontName,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          Navigator.pop(context);
+                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                          await prefs.setBool('isLoggedIn', false);
+                          await prefs.remove('userName');
+                          await prefs.remove('password');
+                          await prefs.setBool('rememberMe', false);
+                          Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: mmColor,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          elevation: 0,
+                        ),
+                        child: Text(
+                          "Log Out",
+                          style: TextStyle(
+                            fontFamily: fontName,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         );
       },
     );
-  }
+}
+
 
 
 Widget buildSummaryCard({
